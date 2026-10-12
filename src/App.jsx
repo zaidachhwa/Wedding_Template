@@ -2,18 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Observer } from 'gsap/Observer'
 import { useGSAP } from '@gsap/react'
-import { couple, story, events, rsvp } from './content'
+import { couple, nikah, walima } from './content'
 
 gsap.registerPlugin(useGSAP, Observer)
-
-// Jagged top/bottom edges for the torn-paper cards. Seeded so each card keeps its shape across renders.
-function torn(seed) {
-  let s = seed
-  const rand = () => ((s = (s * 16807) % 2147483647) / 2147483647)
-  const edge = (y, dir) =>
-    Array.from({ length: 25 }, (_, i) => `${i * (100 / 24)}% ${y + dir * rand() * 5}%`)
-  return `polygon(${[...edge(1, 1), ...edge(99, -1).reverse()].join(',')})`
-}
 
 function Countdown() {
   const target = new Date(couple.date).getTime()
@@ -33,7 +24,7 @@ function Countdown() {
     ['Seconds', (left / 1e3) % 60],
   ]
   return (
-    <dl className="countdown" aria-label="Time until the wedding">
+    <dl className="countdown" aria-label="Time until the Nikah">
       {units.map(([label, n]) => (
         <div key={label}>
           <dt>{label}</dt>
@@ -41,21 +32,6 @@ function Countdown() {
         </div>
       ))}
     </dl>
-  )
-}
-
-function Lace() {
-  // Scalloped doily ring drawn around the story photo.
-  return (
-    <svg className="lace" viewBox="0 0 200 200" aria-hidden="true">
-      {Array.from({ length: 36 }, (_, i) => {
-        const a = (i / 36) * Math.PI * 2
-        return <circle key={i} cx={100 + 90 * Math.cos(a)} cy={100 + 90 * Math.sin(a)} r="8.5" />
-      })}
-      <circle cx="100" cy="100" r="88" />
-      <circle cx="100" cy="100" r="82" className="lace-line" />
-      <circle cx="100" cy="100" r="77" className="lace-dots" />
-    </svg>
   )
 }
 
@@ -70,22 +46,23 @@ function enter(slide) {
     .fromTo(q('.hero-names > *, .hero-meta > *'), { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.08 }, 0.5)
     // Script headings "write" themselves left to right.
     .fromTo(q('.section-title'), { clipPath: 'inset(-30% 100% -30% -5%)' }, { clipPath: 'inset(-30% -5% -30% -5%)', duration: 1.3, ease: 'power2.inOut' }, 0)
-    .fromTo(q('.lace'), { rotation: -60, scale: 0.92, autoAlpha: 0 }, { rotation: 0, scale: 1, autoAlpha: 1, duration: 1.6 }, 0)
-    .fromTo(q('.story-photo'), { scale: 0.85, autoAlpha: 0 }, { scale: 1, autoAlpha: 1 }, 0.15)
-    .fromTo(q('.reveal'), { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.06, duration: 0.9 }, 0.25)
-  // Paper cards drop in from alternating tilts.
-  q('.card').forEach((card, i) =>
-    tl.fromTo(card, { y: 70, rotation: i % 2 ? 3 : -3, autoAlpha: 0 }, { y: 0, rotation: 0, autoAlpha: 1 }, 0.3 + i * 0.1),
-  )
+    // The arched card rises into place, its photo uncovers from the bottom, gold rules draw outwards.
+    .fromTo(q('.arch'), { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.2 }, 0)
+    .fromTo(q('.slide-photo'), { clipPath: 'inset(100% 0% 0% 0% round 999px 999px 0 0)' }, { clipPath: 'inset(0% 0% 0% 0% round 999px 999px 0 0)', duration: 1.4, ease: 'power3.inOut' }, 0.1)
+    .fromTo(q('.slide-photo img'), { scale: 1.2 }, { scale: 1, duration: 2 }, 0.1)
+    .fromTo(q('.arabic'), { y: 12, autoAlpha: 0, filter: 'blur(6px)' }, { y: 0, autoAlpha: 1, filter: 'blur(0px)', duration: 1.2 }, 0.3)
+    .fromTo(q('.rule'), { scaleX: 0 }, { scaleX: 1, duration: 1, ease: 'power2.inOut', stagger: 0.15 }, 0.5)
+    .fromTo(q('.reveal'), { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: 0.05, duration: 0.9 }, 0.45)
   return tl
 }
 
 const SLIDES = [
   ['home', 'Home'],
-  ['story', 'Our Story'],
-  ['details', 'The Details'],
-  ['rsvp', 'RSVP'],
+  ['nikah', 'Nikah'],
+  ['walima', 'Walima'],
 ]
+
+const Rule = () => <span className="rule" aria-hidden="true" />
 
 export default function App() {
   const root = useRef(null)
@@ -254,13 +231,13 @@ export default function App() {
   return (
     <div ref={root}>
       {!opened && (
-        <div className="letter-overlay wine">
+        <div className="letter-overlay green">
           <div className="envelope">
             <div className="env-back" />
             <div className="env-letter">
-              <p className="eyebrow">Together with their families</p>
+              <p className="arabic" lang="ar" dir="rtl">{nikah.bismillah}</p>
+              <p className="eyebrow">You are invited to the Nikah of</p>
               <p className="script">{names}</p>
-              <p className="eyebrow">invite you to celebrate their wedding</p>
               <p className="env-date">{couple.dateLabel}</p>
             </div>
             <div className="env-front" />
@@ -292,79 +269,83 @@ export default function App() {
       <main className="stage">
         <header className="slide hero" id="home">
           <div className="hero-media">
-            <img src={couple.heroPhoto} alt={names} fetchPriority="high" />
+            <img src={couple.heroPhoto} alt="" fetchPriority="high" />
           </div>
           <div className="hero-copy">
             <h1 className="hero-names script">
+              <span className="eyebrow hero-kicker">The Nikah of</span>
               <span>{couple.one}</span>
               <span className="amp">&amp;</span>
               <span>{couple.two}</span>
             </h1>
             <div className="hero-meta">
-              <p className="eyebrow">
-                {couple.dateLabel} · {couple.place}
-              </p>
+              <p className="eyebrow">{couple.dateLabel}</p>
               <Countdown />
               <p className="scroll-hint eyebrow">Scroll to continue</p>
             </div>
           </div>
         </header>
 
-        <section className="slide wine" id="story">
-          <div className="slide-body">
-            <h2 className="section-title script">How We Got Here</h2>
-            <div className="story-frame">
-              <Lace />
-              <img className="story-photo" src={story.photo} alt="" />
+        <section className="slide paper" id="nikah">
+          <div className="slide-body split">
+            <div className="slide-photo">
+              <img src={nikah.photo} alt="" />
             </div>
-            <div className="story-text">
-              {story.paragraphs.map((p) => (
-                <p className="reveal" key={p.slice(0, 20)}>
-                  {p}
-                </p>
-              ))}
-              <p className="reveal sign-off">
-                <span className="eyebrow">With love</span>
-                <span className="script">{names}</span>
+            <article className="arch">
+              <p className="arabic" lang="ar" dir="rtl">{nikah.bismillah}</p>
+              <h2 className="section-title script">Nikah</h2>
+              <p className="name reveal">{nikah.groom}</p>
+              <p className="parents reveal">({nikah.groomParents})</p>
+              <p className="with script reveal">with</p>
+              <p className="name reveal">{nikah.bride}</p>
+              <p className="parents reveal">({nikah.brideParents})</p>
+              <Rule />
+              <p className="date reveal">{nikah.date}</p>
+              <p className="hijri reveal">{nikah.hijri}</p>
+              <p className="time reveal">{nikah.time}</p>
+              <Rule />
+              <p className="venue reveal">{nikah.venue}</p>
+              <p className="address reveal">{nikah.address}</p>
+              <a className="map reveal" href={nikah.map} target="_blank" rel="noreferrer">
+                Get directions
+              </a>
+            </article>
+          </div>
+        </section>
+
+        <section className="slide paper" id="walima">
+          <div className="slide-body split">
+            <div className="slide-photo">
+              <img src={walima.photo} alt="" />
+            </div>
+            <article className="arch">
+              <p className="arabic" lang="ar" dir="rtl">{walima.verseArabic}</p>
+              <p className="verse reveal">
+                “{walima.verse}”<span>{walima.verseRef}</span>
               </p>
-            </div>
+              <h2 className="section-title script">Walima</h2>
+              <p className="name reveal">{walima.names[0]}</p>
+              <p className="with script reveal">&amp;</p>
+              <p className="name reveal">{walima.names[1]}</p>
+              <p className="parents reveal">{walima.line}</p>
+              <Rule />
+              <p className="eyebrow reveal">{walima.day}</p>
+              <p className="date reveal">{walima.date}</p>
+              <p className="hijri reveal">{walima.hijri}</p>
+              <p className="time reveal">{walima.event}</p>
+              <p className="time reveal">{walima.time}</p>
+              <Rule />
+              <p className="venue reveal">{walima.venue}</p>
+              <p className="address reveal">{walima.address}</p>
+              <a className="map reveal" href={walima.map} target="_blank" rel="noreferrer">
+                Get directions
+              </a>
+              <p className="blessing reveal">
+                <span className="eyebrow">{walima.blessing}</span>
+                <span className="script">{walima.family}</span>
+              </p>
+            </article>
           </div>
-        </section>
-
-        <section className="slide paper" id="details">
-          <div className="slide-body">
-            <h2 className="section-title script">The Details</h2>
-            <p className="lede reveal">A few details to help you settle in, slow down, and enjoy every moment with us.</p>
-            <ol className="cards">
-              {events.map((e, i) => (
-                <li className={`card ${i % 2 ? 'card-red' : ''}`} key={e.title} style={{ clipPath: torn(i * 97 + 13) }}>
-                  <h3>{e.title}</h3>
-                  <p className="card-time">{e.time}</p>
-                  <p className="card-place">{e.place}</p>
-                  <p className="card-note">{e.note}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        <section className="slide wine rsvp" id="rsvp">
-          <div className="rsvp-photo">
-            <img src={rsvp.photo} alt="" />
-          </div>
-          <div className="slide-body">
-            <h2 className="section-title script">Kindly RSVP</h2>
-            <p className="eyebrow reveal">Are you joining us?</p>
-            <p className="reveal">
-              We hope you’ll be there when we promise our forever.
-              <br />
-              <strong>Please reply by {rsvp.deadline}</strong>
-            </p>
-          </div>
-          <footer className="footer">
-            <p className="script">{names}</p>
-            <p className="eyebrow">{couple.dateLabel}</p>
-          </footer>
         </section>
       </main>
     </div>

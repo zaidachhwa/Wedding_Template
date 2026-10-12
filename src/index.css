@@ -1,15 +1,16 @@
 :root {
-  --wine: #6a0f1c;
-  --wine-deep: #540a15;
-  --red: #b3141c;
-  --cream: #efe7da;
-  --paper: #e3d7c3;
-  --ink: #3a2a22;
+  --green: #133f30;
+  --green-deep: #0b2a20;
+  --gold: #b0905a;
+  --beige: #f3ede1;
+  --paper: #e7dcc7;
+  --ink: #2c3a31;
   --script: 'Great Vibes', cursive;
   --serif: 'Cormorant Garamond', Georgia, serif;
+  --arabic: 'Amiri', 'Traditional Arabic', serif;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --nav-h: 3rem;
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .1 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 * { box-sizing: border-box; }
@@ -18,22 +19,26 @@ html, body { height: 100%; overflow: hidden; }
 
 body {
   margin: 0;
-  background: var(--cream);
+  background: var(--beige);
   color: var(--ink);
-  font: 400 1.125rem/1.65 var(--serif);
+  font: 400 1.125rem/1.6 var(--serif);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
 }
 
 img { display: block; max-width: 100%; }
 h1, h2, h3, p { margin: 0; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
 .script { font-family: var(--script); font-weight: 400; line-height: 1.1; }
+.arabic { font-family: var(--arabic); line-height: 1.6; color: var(--green); }
 .eyebrow {
   font-size: 0.8rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
+.green { background: var(--green) var(--grain); color: var(--beige); }
+.paper { background: var(--paper) var(--grain); }
 
 /* Slides: the page never scrolls. Each slide fills the screen and only scrolls internally when its content is taller. */
 .stage { position: fixed; inset: 0; overflow: hidden; }
@@ -51,15 +56,13 @@ h1, h2, h3, p { margin: 0; }
   will-change: transform;
 }
 .slide::-webkit-scrollbar { display: none; }
-.slide-body { margin-block: auto; padding: clamp(2.5rem, 7vh, 5rem) 1rem; }
-.wine { background: var(--wine) var(--grain); color: var(--cream); }
-.paper { background: var(--cream) var(--grain); }
+.slide-body { margin-block: auto; padding: clamp(2rem, 6vh, 4rem) 1rem; }
 
 .section-title {
   font-family: var(--script);
-  font-size: clamp(3rem, 9vw, 5rem);
-  word-spacing: 0.15em;
-  margin-bottom: 2rem;
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  color: var(--green);
+  margin: 0.25rem 0 1rem;
   /* GSAP tweens this inset to "write" the heading. Negative values leave room for swashes. */
   clip-path: inset(-30% -5% -30% -5%);
 }
@@ -70,28 +73,26 @@ h1, h2, h3, p { margin: 0; }
   inset: 0 0 auto;
   height: var(--nav-h);
   z-index: 10;
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: clamp(0.75rem, 3vw, 2.5rem);
-  overflow-x: auto;
+  gap: clamp(1.25rem, 5vw, 3rem);
   padding: 0 1rem;
-  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  background: color-mix(in srgb, var(--beige) 88%, transparent);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid color-mix(in srgb, var(--wine) 15%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
 }
 .nav a {
-  color: var(--wine);
+  color: var(--green);
   text-decoration: none;
-  font-size: clamp(0.68rem, 2.6vw, 0.8rem);
-  letter-spacing: clamp(0.08em, 0.5vw, 0.18em);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  white-space: nowrap;
   padding-block: 0.3rem;
   border-bottom: 1px solid transparent;
   transition: opacity 200ms ease, border-color 300ms ease;
 }
-.nav a[aria-current] { border-color: currentColor; }
+.nav a[aria-current] { border-color: var(--gold); }
 @media (hover: hover) and (pointer: fine) { .nav a:hover { opacity: 0.6; } }
 
 /* Hero */
@@ -99,13 +100,10 @@ h1, h2, h3, p { margin: 0; }
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
-  background: var(--cream) var(--grain);
+  background: var(--beige) var(--grain);
 }
-.hero-media {
-  overflow: hidden;
-  clip-path: inset(0% 0% 0% 0%);
-}
-.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.hero-media { overflow: hidden; clip-path: inset(0% 0% 0% 0%); }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
 .hero-copy {
   display: grid;
   align-content: center;
@@ -113,10 +111,12 @@ h1, h2, h3, p { margin: 0; }
   gap: clamp(1rem, 3vh, 2rem);
   padding: clamp(1.25rem, 4vh, 2.5rem) 1rem;
 }
-.hero-names { display: grid; font-size: clamp(3rem, min(13vw, 8vh), 6.5rem); color: var(--red); }
+.hero-names { display: grid; font-size: clamp(3rem, min(13vw, 8vh), 6.5rem); color: var(--green); }
 .hero-names > span { display: block; }
-.hero-names .amp { font-size: 0.6em; margin: -0.15em 0; }
-.hero-meta { display: grid; gap: 1.25rem; color: var(--wine); }
+.hero-names .hero-kicker { font: 500 0.8rem/1 var(--serif); letter-spacing: 0.3em; color: var(--gold); margin-bottom: 0.6rem; }
+.hero-names .amp { font-size: 0.55em; margin: -0.15em 0; color: var(--gold); }
+.hero-meta { display: grid; gap: 1.25rem; color: var(--green); }
+.scroll-hint { opacity: 0.55; font-size: 0.7rem; }
 
 @media (min-width: 860px) {
   .hero { grid-template-columns: 1.1fr 1fr; grid-template-rows: 1fr; }
@@ -131,72 +131,98 @@ h1, h2, h3, p { margin: 0; }
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
-.countdown dt { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-top: 0.4rem; }
+.countdown dt { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 0.4rem; }
 .countdown-done { font-size: 1.5rem; }
 
-/* Story */
-.story-frame {
-  position: relative;
-  width: min(320px, 78vw);
-  aspect-ratio: 1;
-  margin: 0 auto 3rem;
+/* Nikah & Walima: arched card, photo beside it on wide screens */
+.split { display: grid; gap: 2.5rem; justify-items: center; width: 100%; max-width: 64rem; margin-inline: auto; }
+.split .slide-photo { order: 2; }
+@media (min-width: 960px) {
+  .split { grid-template-columns: 1fr 1fr; align-items: center; }
+  .split .slide-photo { order: 0; }
+}
+
+.slide-photo {
+  width: min(100%, 24rem);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  /* Arch-shaped window; GSAP tweens the inset to uncover it. */
+  clip-path: inset(0% 0% 0% 0% round 999px 999px 0 0);
+  box-shadow: 0 20px 40px -20px rgb(11 42 32 / 0.5);
+}
+.slide-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.arch {
+  --arch: min(15rem, 44vw);
+  width: min(100%, 30rem);
   display: grid;
-  place-items: center;
+  justify-items: center;
+  padding: calc(var(--arch) * 0.42) clamp(1.25rem, 6vw, 2.5rem) 2.5rem;
+  background: var(--beige) var(--grain);
+  border: clamp(8px, 2.2vw, 12px) solid var(--green);
+  border-radius: 50% 50% 8px 8px / var(--arch) var(--arch) 8px 8px;
+  /* Inner beige gap, then a hairline of gold that follows the arch. */
+  box-shadow:
+    inset 0 0 0 6px var(--beige),
+    inset 0 0 0 7px var(--gold),
+    0 24px 48px -24px rgb(11 42 32 / 0.45);
 }
-.lace { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--cream); }
-.lace .lace-line { fill: none; stroke: var(--wine); stroke-width: 1; }
-.lace .lace-dots { fill: none; stroke: var(--wine); stroke-width: 2; stroke-dasharray: 0.1 4; stroke-linecap: round; }
-.story-photo {
+.arch .arabic { font-size: clamp(1.35rem, 5vw, 1.75rem); }
+.arch .name {
+  font-size: clamp(1.4rem, 5.5vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green);
+  line-height: 1.2;
+}
+.arch .parents { font-style: italic; font-size: 1rem; opacity: 0.85; max-width: 22rem; }
+.arch .with { font-size: 2rem; color: var(--gold); margin: 0.35rem 0; }
+.arch .date { font-size: 1.35rem; font-weight: 600; color: var(--green); letter-spacing: 0.05em; }
+.arch .hijri { font-style: italic; }
+.arch .time { font-weight: 600; letter-spacing: 0.04em; }
+.arch .venue { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); }
+.arch .address { font-size: 1rem; max-width: 20rem; }
+.arch .verse { font-style: italic; display: grid; gap: 0.1rem; }
+.arch .verse span { font-style: normal; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.arch .blessing { display: grid; gap: 0.2rem; margin-top: 1.5rem; }
+.arch .blessing .eyebrow { color: var(--gold); font-size: 0.72rem; }
+.arch .blessing .script { font-size: clamp(1.5rem, 6vw, 1.9rem); color: var(--green); }
+
+/* Gold divider with a small diamond, drawn outwards by GSAP. */
+.rule {
   position: relative;
-  width: 72%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 50%;
+  display: block;
+  width: min(12rem, 60%);
+  height: 1px;
+  margin: 1rem 0;
+  background: linear-gradient(90deg, transparent, var(--gold) 20% 80%, transparent);
 }
-.story-text { max-width: 34rem; margin: 0 auto; display: grid; gap: 1.25rem; }
-.sign-off { display: grid; gap: 0.25rem; margin-top: 1.5rem; }
-.sign-off .script { font-size: 2.5rem; }
-
-/* Details */
-.details .section-title { color: var(--wine); }
-.lede { max-width: 28rem; margin: -0.5rem auto 3rem; font-style: italic; }
-.cards { list-style: none; padding: 0; margin: 0 auto; max-width: 34rem; display: grid; }
-.card {
-  padding: 3.25rem 1.5rem;
-  margin-top: -1.25rem;
-  background: var(--paper) var(--grain);
-  display: grid;
-  gap: 0.35rem;
-  filter: drop-shadow(0 6px 10px rgb(60 30 20 / 0.12));
+.rule::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  translate: -50% -50%;
+  rotate: 45deg;
 }
-.card h3 { font-weight: 500; font-size: 1.35rem; letter-spacing: 0.18em; text-transform: uppercase; }
-.card-time { color: var(--red); font-weight: 700; font-size: 1.4rem; letter-spacing: 0.06em; }
-.card-place { font-weight: 600; }
-.card-note { max-width: 22rem; margin: 0 auto; font-style: italic; }
-.card-red {
-  background:
-    radial-gradient(120% 80% at 20% 20%, #d4232a, transparent 60%),
-    radial-gradient(100% 90% at 85% 80%, #8f0d14, transparent 65%),
-    var(--red);
-  color: var(--cream);
-  position: relative;
-  z-index: 1;
+
+.map {
+  margin-top: 0.75rem;
+  padding: 0.55rem 1.4rem;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease, scale 160ms var(--ease-out);
 }
-.card-red .card-time { color: #fff; }
-
-/* RSVP */
-.rsvp-photo { height: clamp(10rem, 30vh, 20rem); flex-shrink: 0; overflow: hidden; }
-.rsvp-photo img { width: 100%; height: 100%; object-fit: cover; }
-.rsvp .slide-body > p { margin-bottom: 1rem; }
-.rsvp strong { font-weight: 600; }
-
-:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-
-/* Footer */
-.footer { background: var(--wine-deep); flex-shrink: 0; color: var(--cream); text-align: center; padding: 3rem 1rem; }
-.footer .script { font-size: 2.5rem; }
-
-.scroll-hint { opacity: 0.55; font-size: 0.7rem; }
+.map:active { scale: 0.97; }
+@media (hover: hover) and (pointer: fine) { .map:hover { background: var(--green); color: var(--beige); } }
 
 /* Opening letter */
 .letter-overlay {
@@ -215,17 +241,17 @@ h1, h2, h3, p { margin: 0; }
   aspect-ratio: 1.45;
 }
 .env-back, .env-front, .env-flap { position: absolute; inset: 0; background: var(--paper) var(--grain); }
-.env-back { background-color: #cdbfa8; border-radius: 4px; }
+.env-back { background-color: #cfc2a8; border-radius: 4px; }
 .env-front {
   z-index: 3;
   clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
-  filter: drop-shadow(0 -2px 3px rgb(60 30 20 / 0.15));
+  filter: drop-shadow(0 -2px 3px rgb(30 40 30 / 0.15));
   border-radius: 4px;
 }
 .env-flap {
   z-index: 4;
   bottom: 38%;
-  background-color: #ddd0bb;
+  background-color: #ddd1b9;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
 }
@@ -236,15 +262,17 @@ h1, h2, h3, p { margin: 0; }
   display: grid;
   align-content: start;
   justify-items: center;
-  gap: 0.35rem;
-  padding: 8% 6%;
-  background: var(--cream) var(--grain);
-  color: var(--wine);
+  gap: 0.2rem;
+  padding: 5% 6%;
+  /* Same beige + grain as the home page: the letter grows to fill the screen and becomes it. */
+  background: var(--beige) var(--grain);
+  color: var(--green);
   text-align: center;
-  box-shadow: 0 2px 10px rgb(60 30 20 / 0.15);
+  box-shadow: 0 2px 10px rgb(30 40 30 / 0.15);
 }
-.env-letter .eyebrow { font-size: clamp(0.56rem, 2.3vw, 0.72rem); }
-.env-letter .script { font-size: clamp(1.9rem, 8vw, 2.9rem); color: var(--red); }
+.env-letter .arabic { font-size: clamp(0.9rem, 3.6vw, 1.25rem); line-height: 1.4; }
+.env-letter .eyebrow { font-size: clamp(0.56rem, 2.3vw, 0.72rem); color: var(--gold); }
+.env-letter .script { font-size: clamp(1.9rem, 8vw, 2.9rem); }
 .env-date { font-size: clamp(0.8rem, 2.5vw, 1rem); font-weight: 600; letter-spacing: 0.1em; }
 
 .seal {
@@ -257,14 +285,14 @@ h1, h2, h3, p { margin: 0; }
   aspect-ratio: 1;
   border: 0;
   border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%;
-  background: radial-gradient(circle at 35% 30%, #d0303a, var(--red) 45%, #7d0a12);
-  box-shadow: inset 0 0 0 4px rgb(0 0 0 / 0.12), inset 0 0 0 7px rgb(255 255 255 / 0.08), 0 6px 14px rgb(40 0 5 / 0.45);
+  background: radial-gradient(circle at 35% 30%, #2f6b52, var(--green) 45%, #06190f);
+  box-shadow: inset 0 0 0 4px rgb(0 0 0 / 0.15), inset 0 0 0 7px rgb(255 255 255 / 0.07), 0 6px 14px rgb(5 20 12 / 0.45);
   display: grid;
   place-items: center;
   padding: 0 0 0.08em; /* script glyphs sit high; nudge to optical centre */
   line-height: 1;
   white-space: nowrap;
-  color: #f3d9c9;
+  color: #e3c98f;
   font-size: clamp(1rem, 3.8vw, 1.4rem);
   cursor: pointer;
   /* Hover uses the `scale` property so it never fights GSAP, which animates `transform` on open. */
@@ -273,6 +301,6 @@ h1, h2, h3, p { margin: 0; }
 @media (hover: hover) and (pointer: fine) { .seal:hover { scale: 1.05; } }
 @media (prefers-reduced-motion: no-preference) {
   .seal { animation: pulse 2.4s ease-in-out infinite; }
-  @keyframes pulse { 50% { box-shadow: inset 0 0 0 4px rgb(0 0 0 / 0.12), inset 0 0 0 7px rgb(255 255 255 / 0.08), 0 6px 14px rgb(40 0 5 / 0.45), 0 0 0 10px rgb(239 231 218 / 0.12); } }
+  @keyframes pulse { 50% { box-shadow: inset 0 0 0 4px rgb(0 0 0 / 0.15), inset 0 0 0 7px rgb(255 255 255 / 0.07), 0 6px 14px rgb(5 20 12 / 0.45), 0 0 0 10px rgb(176 144 90 / 0.18); } }
 }
 .seal-hint { opacity: 0.75; }
