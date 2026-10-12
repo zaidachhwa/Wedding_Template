@@ -1,6 +1,6 @@
 :root {
-  --green: #133f30;
-  --green-deep: #0b2a20;
+  --green: #002f19;
+  --green-deep: #001a0e;
   --gold: #b0905a;
   --beige: #f3ede1;
   --paper: #e7dcc7;
@@ -285,7 +285,7 @@ h1, h2, h3, p { margin: 0; }
   aspect-ratio: 1;
   border: 0;
   border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%;
-  background: radial-gradient(circle at 35% 30%, #2f6b52, var(--green) 45%, #06190f);
+  background: radial-gradient(circle at 35% 30%, #1d5a3c, var(--green) 45%, #00140a);
   box-shadow: inset 0 0 0 4px rgb(0 0 0 / 0.15), inset 0 0 0 7px rgb(255 255 255 / 0.07), 0 6px 14px rgb(5 20 12 / 0.45);
   display: grid;
   place-items: center;
